@@ -26,10 +26,7 @@
     cd fastapi-email-confirmation
     ```
 
-2. **Создайте файл `.env` на основе `.env.example` и заполните его нужными параметрами:**
-    ```sh
-    cp .env.example .env
-    ```
+2. **Заполните файл `.env` нужными параметрами:**
 
 3. **Запустите Docker Compose:**
     ```sh
