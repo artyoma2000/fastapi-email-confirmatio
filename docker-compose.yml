@@ -1,0 +1,32 @@
+version: '3.10'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/chat_db
+      - SECRET_KEY=your_secret_key
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: chat_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d chat_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
